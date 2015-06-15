@@ -1,6 +1,6 @@
 The asset ID is an immutable identifier of an asset that is created at issuance and is derived from the issuance transaction.
 
-There are two types of Asset IDs corresponding to the two types of assets supported by the new colored coins protocol supports: [[Benefits#locked-assets|locked]] and [[Benefits#unlocked-assets|unlocked]].
+There are two types of Asset IDs corresponding to the two types of assets supported by the new colored coins protocol supports: [[locked|Benefits#locked-assets]] and [[Benefits#unlocked-assets|unlocked]].
 
 == Unlocked Asset IDs ==
 
