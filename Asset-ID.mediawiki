@@ -1,0 +1,51 @@
+The asset ID is an immutable identifier of an asset that is created at issuance and is derived from the issuance transaction.
+
+There are two types of Asset IDs corresponding to the two types of assets supported by the new colored coins protocol supports: [[Benefits#locked-assets|locked]] and [[Benefits#unlocked-assets|unlocked]].
+
+== Unlocked Asset IDs ==
+
+Unlocked asset IDs look similar to Bitcoin addresses, except instead of starting with the number '''1''' start with the capital letter '''U'''.
+
+An unlocked Asset ID is derived from the '''public key''' of the '''first input in the issuance transaction''' similar to the way that a [https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses Bitcoin address is derived from a public key]. The difference is that instead of padding the network version <code>0x00</code> which gives the prefix 1 to standard Bitcoin addresses, we pad with <code>0x44</code> which ensures the asset ID has the prefix <code>U</code>.
+
+In detail, the process is
+
+<pre>pk = PUBLIC KEY of first UTXO in issuance transaction
+extended_ripemd = `0x44`+RIPEMD-160(SHA-256(pk))
+checksum = first 4 bytes of SHA-256(SHA-256(extended_ripemd))
+Unlocked Asset ID = Base58check(extended_ripemd+checksum)</pre>
+where <code>+</code> means concatenation.
+
+== Locked Asset IDs ==
+
+Locked asset IDs look similar to Bitcoin addresses, except instead of starting with the number '''1''' start with the capital letter '''L'''.
+
+A Locked Asset ID is derived in a similar way, except we use the '''transaction ID''' and '''index''' of the '''first input in the issuance transaction''' instead of the public key. Instead of padding with <code>0x44</code> we pad with <code>0x30</code> which ensures the asset ID has the prefix <code>L</code>.
+
+In detail, the process is
+
+<pre>txid = issuance TRANSACTION_ID
+idx = index of first UTXO in the issuance transaction
+extended_ripemd = `0x30`+RIPEMD-160(SHA-256(txid+'-'+idx))
+checksum = first 4 bytes of SHA-256(SHA-256(extended_ripemd))
+Locked Asset ID = Base58check(extended_ripemd+checksum)</pre>
+where as before <code>+</code> means concatenation.
+
+== Comments ==
+
+=== Asset IDs and Bitcoin Confirmations ===
+
+Note that both asset ID types make no reference to a Bitcoin block and hence are meaningful even at zero confirmations. Thanks to that we can perform [[Coloring#issuance-transaction-encoding|issuance and transfer]] of an asset in the same transaction.
+
+=== Unlocked ===
+
+Since an unlocked asset ID points to a Bitcoin Address (via the underlying public key), all assets that originate from that Bitcoin address are considered the same. We can thus perform more than one issuance transactions (provided we own the corresponding private key) and issue more units of that asset, which is why it is unlocked.
+
+=== Locked ===
+
+Since locked asset IDs reference a transaction id, any attempt to issue more of that asset will necessarily generate a new asset ID, so this specific asset can only be issued once, which is why it is locked.
+
+=== Lock status and the [[Rules%20Engine|Rules Engine]] ===
+
+Since the new colored coins protocol supports an extra layers of rules it is possible to override the locked status by declaring [[Metadata#minters|Minters]] in the Metadata
+

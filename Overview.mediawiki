@@ -1,0 +1,31 @@
+= Bitcoin =
+
+Bitcoin is the forerunner and by far the most widely used cryptocurrency. In what follows we will use the customary notation of referring to the Bitcoin network/protocol as '''Bitcoin''' (Capitalized) and to the units of currency flowing in the Bitcoin network as '''bitcoins''' (lowercase). Sometimes we will be using smaller units called '''[[notes-and-glossary#satoshis|satoshis]]'''.
+
+By design, bitcoins have several highly desired technical attributes * Fixed supply * Non-counterfeitable * Divisible * Easily transportable
+
+On top of that, Bitcoin is decentralized. Decentralization adds an extra layer of robustness because the Bitcoin network has no single point of failure.
+
+Any and all Bitcoin transactions are publicly available on the a ledger a.k.a “The Blockchain”, and are [[notes-and-glossary#immutability|immutable]].
+
+= Colored Coins =
+
+While originally designed to be a currency, Bitcoin supports a limited scripting language that can be used to store metadata on the blockchain. The term “Colored Coins” refers to a protocol that uses the blockchain as a public ledger for asset manipulation.
+
+The basic trick is to create digital tokens by [[storing-metadata|associating metadata]] with a bitcoin transaction that can unambiguously represent the creation or transfer of an asset (hence “coloring the (bit)coins”).
+
+The value of such digital assets is tied to a real-world promise by the asset issuers that they are willing to redeem those digital tokens for something of value in the real world.
+
+The advantage given by using the blockchain as the backbone for such asset manipulation is that one can rely on the blockchain’s transparency, immutability, ease of transfer and non-counterfeitability to transfer and trade such digital tokens with unprecedented security and ease.
+
+= Desired attributes of a colored coins protocol =
+
+* Embed the maximal amount of data with minimal amount of load on the blockchain
+* Be as decentralized as possible
+* Allow for sending arbitrary amounts of metadata with every colored transaction
+* Allow for both mutable assets (can be reissued) and immutable assets (cannot be reissued)
+
+= Implementations =
+
+Over the past few years we have seen the appearance of several colored coins implementations (which are part of the larger [[bitcoin-2.0|Bitconi 2.0]] movement. * [https://www.coinprism.com/ openassets] * [http://chromawallet.com/ chromawallet] * [http://coinspark.org/ coinspark] * [http://www.colu.co colu]
+

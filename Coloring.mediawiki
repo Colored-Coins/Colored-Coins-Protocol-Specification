@@ -1,0 +1,131 @@
+In this section we describe how the new colored coins protocol encodes asset issuance and transfer, loosely referred to as &quot;coloring&quot; bitcoins.
+
+= ❛Coloring❜ Bitcoin Transactions =
+
+The new colored coins protocol uses 2 types of Bitcoin OP_CODES to store asset manipulation instructions on top of the Bitcoin blockchain. * [[#op_return|OP_RETURN]] outputs * [[#multisignature-addresses-multisig|Multisignature]] addresses ''(optional)''
+
+=== OP_RETURN ===
+
+Soon after the advent of Bitcoin, users started to look for [[Data%20Storage%20Methods|ways to embed data on the Bitcoin Blockchain]], some of which were less than ideal from the Bitcoin network's perspective. To accommodate that need, support for a new OP_CODE was added. This OP_CODE called [http://bitzuma.com/posts/op-return-and-the-future-of-bitcoin/ OP_RETURN] was especially designed for storing '''small''' amounts of arbitrary data on the Bitcoin blockchain.
+
+At the moment of writing, the Bitcoin network accepts transactions with ''at most one'' OP_RETURN output of the form
+
+<pre> OP_RETURN &lt;up to 40 bytes of arbitrary data&gt;</pre>
+where the data is currently limited to 40 bytes (but it is quiet possible that in the near future 80 bytes will be allowed).
+
+In cases where we need '''more than 40 bytes of data''' for encoding an asset manipulation transaction we encode the remaining data in an extra multisig output.
+
+=== Multisignature Addresses (multisig) ===
+
+In general Bitcoin allows [http://bitcoin.stackexchange.com/questions/3718/what-are-multi-signature-transactions '''m out of N''' multisignature addresses] with <code>m&lt;N</code> such that <code>m</code> signatures are needed in order to redeem the script.
+
+Multisignature addresses are not meant to be used for encoding data on the blockchain and have several [[Data%20Storage%20Methods#1-of-n-multisig-address|disadvantages]] in that regard. Since we do not want to put a permanent burden on the memory of nodes in the Bitcoin network we use multisig addresses of the form '''1''' out of N. This way we can quickly spend that single UTXO (so that miners can remove it from the list of UTXOs) and use the remaining <code>N-1</code> public key slots (32 bytes each) to encode data.
+
+= Asset Manipulating Trasnactions =
+
+The new colored coins protocol implementation uses two types of asset manipulation transactions: ### Issuance (and transfer) transactions In an issuance transaction a new asset is created and many of the asset's attributes are being determined. Optionally, we can also transfer assets during an issuance transaction (even assets created in that very transaction). ### Transfer only transactions A transaction where only asset transfer occurs, no issuance.
+
+== Issuance Transaction Encoding ==
+
+{|
+!align="center"|Bytes
+!Description
+!Comments
+!Stored in
+|-
+|align="center"|2
+|Protocol Identifier
+|<code>0x4343</code> ASCII representation of the string CC (&quot;Colored Coins&quot;)
+|OP_RETURN
+|-
+|align="center"|1
+|Version Number
+|Currently <code>0x01</code>
+|OP_RETURN
+|-
+|align="center"|1
+|'''Issuance''' OP_CODEs
+|
+|OP_RETURN
+|-
+|align="center"|20
+|SHA1 Torrent Hash
+|(''optional''), only when metadata is included
+|OP_RETURN<br/> or Torrent
+|-
+|align="center"|32
+|SHA256 of [[Metadata|metadata]]
+|(''optional''), only when metadata is included<br/>Allows for torrent metadata verification
+|Torrent
+|-
+|align="center"|1-7
+|[[#amount|Amount]] of '''issued units'''
+|Encoded with the [[Encoding%20Scheme|Precision Encoding Scheme]]
+|OP_RETURN
+|-
+|align="center"|2-9 (per<br/>instruction)
+|[[Transfers|Transfer]] instruction
+|Encoding the flow of assets from inputs to outputs
+|OP_RETURN
+|-
+|align="center"|1
+|[[#issuance-flag|Issuance Flag]]
+|In fact only 4 bits are used
+|OP_RETURN
+|}
+
+== Transfer Transaction Encoding ==
+
+{|
+!align="center"|Bytes
+!Description
+!Comments
+!align="center"|Stored in
+|-
+|align="center"|2
+|Protocol Identifier
+|<code>0x4343</code> ASCII representation of the string CC (&quot;Colored Coins&quot;)
+|align="center"|OP_RETURN
+|-
+|align="center"|1
+|Version Number
+|Currently <code>0x01</code>
+|align="center"|OP_RETURN
+|-
+|align="center"|1
+|'''Transfer''' OP_CODEs
+|
+|align="center"|OP_RETURN
+|-
+|align="center"|20
+|SHA1 Torrent Hash
+|(''optional''), only when metadata is included
+|align="center"|OP_RETURN<br/> or Torrent
+|-
+|align="center"|32
+|SHA256 of [[Metadata|metadata]]
+|(''optional''), only when metadata is included<br/>Allows for torrent metadata verification
+|align="center"|Torrent
+|-
+|align="center"|2-9 (per<br/>instruction)
+|[[Transfers|Transfer]] instruction
+|Encoding the flow of assets from inputs to outputs
+|align="center"|OP_RETURN
+|}
+
+==== Amount ====
+
+The number of issued units. A signed integer ranging from <code>1..10,000,000,000,000,000 (10^16)</code> encoded with our [[#Encoding%20Scheme|Precision Encoding Scheme]].
+
+<code>Relevant only in the case of an issuance transaction</code>
+
+==== Issuance Flag ====
+
+This flag specifies some extra information about a newly issued asset (Only 4 bits are actually used at the moment) * The first 3 bits describe the divisibility of the asset * The last bit designates whether the asset is [[Benefits#locked-assets|locked]] or [[Benefits#unlocked-assets|unlocked]]
+
+<code>Relevant only in the case of an issuance transaction</code>
+
+==== OP_CODE ====
+
+The [[#issuance_op_return|Issuance]] or [[#transfer_op_return|Transfer]] [[OP_CODEs|OP_CODE]]s to be executed during the processing of the transaction.
+

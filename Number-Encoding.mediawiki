@@ -1,0 +1,70 @@
+= Number Encoding Scheme =
+
+== Introduction ==
+
+The new colored coins implementation uses a precision encoding scheme for encoding the integral amount of an asset's units during issuance and transfer. This scheme supports numbers with up to '''16 significant digits''' and favors '''round''' and '''small''' numbers, since it is anticipated that in most use cases an asset will be issued (or reissued) in either small or round number amounts.
+
+== Technical Details ==
+
+Specifically, the amount of bytes required to store an integer depends on the Mantis and the Exponent, i.e. a number without trailing zeros (Mantis) and exponent required to express this number in &quot;scientific form&quot;
+
+<pre>Number = Mantis X 10^(Exponent)</pre>
+For example * The number <code>300 million</code> ==&gt; <code>3x10^8</code> * The number <code>333 million</code> ==&gt; <code>333x10^6</code> * The number <code>300 million and one</code> ==&gt; <code>333000001</code> (no exponent).
+
+In this scheme * Any integer in the range <code>0-10,000,000,000,000,000 (10^16)</code> can be represented with full precision. * The least amount of memory (1 byte) is used when storing small numbers (0..31) * Next in line (requiring 2 bytes) are round numbers, namely numbers that require no more than 2 non zero digits to express with full precision (e.g. <code>10^16</code> or 33 trillion or 99 but not 666). In the following table we list the amount of bytes used to store a number based on the number of significant digits required to express it in full precision.
+
+The number is represented using a Mantis and an Exponent
+
+<pre>Number=2^(Mantis bits) X 10^(2^(Exponent bits))</pre>
+{|
+!align="center"|Bytes
+!align="center"|Max Precision Digits
+!align="center"|Mantis Bits
+!align="center"|Exponent Bits
+|-
+|align="center"|1
+|align="center"|0-31 (actual numbers)
+|align="center"|5
+|align="center"|0
+|-
+|align="center"|2
+|align="center"|2
+|align="center"|9
+|align="center"|4
+|-
+|align="center"|3
+|align="center"|5
+|align="center"|17
+|align="center"|4
+|-
+|align="center"|4
+|align="center"|7
+|align="center"|25
+|align="center"|4
+|-
+|align="center"|5
+|align="center"|10
+|align="center"|34
+|align="center"|3
+|-
+|align="center"|6
+|align="center"|12
+|align="center"|42
+|align="center"|3
+|-
+|align="center"|7
+|align="center"|16
+|align="center"|54
+|align="center"|0
+|}
+
+The derivation of the data in this table is straightforward (you can use [https://gist.github.com/assafshomer/88053ae92db4446f23a1 these few lines of ruby code] to reproduce it)
+
+Basically the logic is the following. Given a number of bytes * 3 bits are reserved for encoding the number of available bytes * With '''1 byte''' only use the mantis (no exponent) so we can express all numbers in the range <code>0..2^5-1</code> * For bigger number of bytes we increment the number of bits in the mantis until we can no longer express numbers with the desired precision * The remaining bits go to the exponent * When the mantis exhaust our desired precision we leave nothing for the exponent
+
+For example, let's derive the second line of the table.
+
+We have 2 bytes which are 16 bits. 3 are reserved for the bytes flag so we have 13 bits left. Now we look for the smallest number of Mantis bits such that <code>Mantis X 10^(Exponent)</code> can still be expressed with at most 16 digits of precision but if we add one more bit to the Mantis we can no longer support such precision.
+
+This number turns out to be 9, because with '''9''' bits for the Mantis we have 4 bits left for the exponent. This means that the maximal number we can reach in this form is <code>2^9 X 10^(2^(13-9))=516 X 10^16</code> which is '''bigger''' than <code>10^16</code> (our desired precision). But if we try to add one more bit to the mantis we have 10 bits for the mantis and only 3 left for the exponent and so the maximal number that can be represented is <code>2^10 X 10^(2^(13-10))=1024 X 10^8</code> which is '''smaller''' than <code>10^16</code>, and hence doesn't support our desired precision.
+
