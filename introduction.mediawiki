@@ -1,0 +1,11 @@
+This document describes Colored Coins protocol specification for issuing and transacting digital asset on top of the Bitcoin Blockchain. Colored Coins is a concept that allows attaching metadata to Bitcoin transactions and leveraging the Bitcoin infrastructure for issuing and trading immutable digital assets that can represent real world value. Digital asset on top of the Bitcoin’s Blockchain can be used to issue Financial assets (securities like shares, commodities like Gold or new currencies), Prove of ownership (A digital key to a house or a car, a concert ticket), store information (Documents, Certificates, Contracts) or creating smart contracts (CFDs, Loans, Bets, Derivatives).
+
+This Document is divided to 2 parts:
+
+===== 1. The coloring scheme =====
+
+The coloring scheme describes the encoding used to encode/decode the Colored Coins data that is stored in a bitcoin transaction after the OP_RETURN operator. This coloring scheme is optimized to allow robust functionality by inserting the most data within the current size constraints of the OP_RETURN operator (40 Bytes)
+
+===== 2. Rule engine =====
+
+This document introduces the first specification for handling metadata for digital assets. Because of the 40 Bytes limit of the OP_RETURN field, any metadata that is attached to a transaction is hashed and stored in torrents to allows decentralized access to the information. By hashing the metadata for every transaction, Colored Coins actually expands dramatically the basic Bitcoin functionality by allowing to insert rules that exist outside the blockchain and can be publicly accessed via torrents and verified against a specific transaction thus creating a rule engine with basic smart contract functionality.
