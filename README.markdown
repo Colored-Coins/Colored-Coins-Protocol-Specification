@@ -1,4 +1,4 @@
-# The Colored Coins Protocol
+# [The Colored Coins Protocol](../../wiki/)
 ## General
 1. [Introduction](../../wiki/Introduction)
 1. [Benefits](../../wiki/Benefits)
