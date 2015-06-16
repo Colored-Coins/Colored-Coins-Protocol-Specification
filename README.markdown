@@ -1,5 +1,6 @@
 # [The Colored Coins Protocol](../../wiki/)
 ## General
+1. [Home](../../wiki/)
 1. [Introduction](../../wiki/Introduction)
 1. [Benefits](../../wiki/Benefits)
 
