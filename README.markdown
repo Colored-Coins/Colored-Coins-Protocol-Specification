@@ -15,5 +15,4 @@
 1. [Colored Addresses](../../wiki/Colored-Addresses)
 
 ## Miscellaneous
-1. [Overview](../../wiki/Overview)
 1. [Data Storage Methods](../../wiki/Data-Storage-Methods)
