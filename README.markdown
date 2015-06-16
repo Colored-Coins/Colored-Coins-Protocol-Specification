@@ -5,7 +5,7 @@
 
 ## Technical
 1. [Coloring Scheme](../../wiki/Coloring-Scheme)
-1. [Metadata](../../wiki/Metadata)
+1. [Asset Metadata](../../wiki/Asset-Metadata)
  1. [Data](../../wiki/Data)
  1. [Rules](../../wiki/Rules)
 1. [OP_CODEs](../../wiki/OP_CODEs)
