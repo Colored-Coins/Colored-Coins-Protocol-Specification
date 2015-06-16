@@ -9,9 +9,10 @@
  1. [Data](../../wiki/Data)
  1. [Rules](../../wiki/Rules)
 1. [OP_CODEs](../../wiki/OP_CODEs)
+1. [Transfer Encoding](../../wiki/Transfers)
 1. [Number Encoding](../../wiki/Number-Encoding)
-1. [Transfers](../../wiki/Transfers)
 1. [Asset IDs](../../wiki/Asset-IDs)
+1. [Colored Addresses](../../wiki/Colored-Addresses)
 
 ## Miscellaneous
 1. [Overview](../../wiki/Overview)
