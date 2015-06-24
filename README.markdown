@@ -16,4 +16,5 @@
  1. [Rules](../../wiki/Rules)
 
 ## Miscellaneous
+1. [Faq](../../wiki/Faq)
 1. [Data Storage Methods](../../wiki/Data-Storage-Methods)
