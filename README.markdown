@@ -9,7 +9,7 @@
   1. [OP_CODEs](../../wiki/OP_CODEs)
   1. [Transfer Encoding](../../wiki/Transfers)
   1. [Number Encoding](../../wiki/Number-Encoding)
-  1. [Asset IDs](../../wiki/Asset-ID)
+  1. [Asset ID](../../wiki/Asset-ID)
   1. [Colored Addresses](../../wiki/Colored-Addresses)
 1. [Metadata Handling](../../wiki/Metadata)
  1. [Data](../../wiki/Data)
