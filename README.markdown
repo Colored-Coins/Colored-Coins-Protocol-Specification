@@ -12,7 +12,7 @@
   1. [Asset ID](../../wiki/Asset-ID)
   1. [Colored Addresses](../../wiki/Colored-Addresses)
 1. [Metadata Handling](../../wiki/Metadata)
- 1. [Data](../../wiki/Data)
+ 1. [Static Data](../../wiki/Static-Data)
  1. [Rules](../../wiki/Rules)
 
 ## Miscellaneous
