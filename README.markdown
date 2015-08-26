@@ -1,4 +1,6 @@
 # [The Colored Coins Protocol](../../wiki/)
+[![npm version](http://slack.coloredcoins.org/badge.svg)](http://slack.coloredcoins.org)
+
 ## General
 1. [Home](../../wiki/)
 1. [Introduction](../../wiki/Introduction)
