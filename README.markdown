@@ -21,3 +21,6 @@
 ## Miscellaneous
 1. [Faq](../../wiki/Faq)
 1. [Data Storage Methods](../../wiki/Data-Storage-Methods)
+deposit_address": "aefd726ac55f14cc0a4acdf3b1",
+        "price_at_ont": "0.1",
+        "price_at_ong": "0.5"https://t.me/BrgAirDropBot?start=592478d286
